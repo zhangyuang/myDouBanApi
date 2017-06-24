@@ -4,7 +4,7 @@ module.exports = {
 		host: '127.0.0.1',
 		user: 'root',
 		password: 'keyfordb',
-		database: 'nodejs_express',
+		database: 'doubanApi',
 		port: 3306
 	}
 }

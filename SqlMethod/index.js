@@ -24,8 +24,14 @@ module.exports = {
 			//获取前台页面传来的参数
 			//建立连接，向表中插入值
 			var params = req.body
-			connection.query($sql.insert, { name: params.name, rating: params.rating, imgUrl: params.imgUrl, description: params.description, kind: params.kind }, function (err, result) {
-				console.log(err)
+			var data = {
+				name: params.name,
+				rating: params.rating,
+				imgUrl: params.imgUrl,
+				description: params.description,
+				kind: params.kind
+			}
+			connection.query($sql.insert, data, function (err, result) {
 				if(result) {
 					result = {
 						code: 200,
@@ -39,18 +45,32 @@ module.exports = {
 			})
 		})
 	},
-	queryById: function (req, res, next) {
-		var id = req.query.id;//为了拼凑正确的sql语句，这里要转下整数
+	queryByKind: function (req, res, next) {
+		var kind = req.query.kind;//为了拼凑正确的sql语句，这里要转下整数
 		pool.getConnection(function (err, connection) {
-			connection.query($sql.queryById, id,function (err, result) {
+			connection.query($sql.queryByKind, kind,function (err, result) {
 				jsonWrite(res, result);
 				connection.release();
 			})
 		})
 	},
-	queryAll: function (req, res, next) {
+	updateByName: function (req, res, next) {
+		var params = req.body
+		var data = {
+				name: params.name,
+				rating: params.rating,
+				imgUrl: params.imgUrl,
+				description: params.description,
+				kind: params.kind
+		}
 		pool.getConnection(function (err, connection) {
-			connection.query($sql.queryAll, function (err, result) {
+			connection.query($sql.updateByName, [data, params.name], function (err ,result) {
+				if(result) {
+					result = {
+						code: 200,
+						msg: '修改成功'
+					}
+				}
 				jsonWrite(res, result);
 				connection.release();
 			})

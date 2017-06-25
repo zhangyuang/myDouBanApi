@@ -8,12 +8,6 @@ router.get('/', function (req, res, next) {
 router.post('/addMovie', function (req, res, next) {
 	SqlMethod.addMovie(req, res, next)
 });
-router.post('/deleteUser', function (req, res, next) {
-	SqlMethod.deleteUser(req ,res, next);
-});
-router.post('/updateUser', function (req, res, next) {
-	SqlMethod.update(req, res, next);
-});
 router.get('/queryAll', function (req, res, next) {
 	SqlMethod.queryAll(req, res, next);
 });

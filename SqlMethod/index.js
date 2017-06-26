@@ -19,11 +19,12 @@ var jsonWrite = function (res, ret) {
 	}
 };
 module.exports = {
+	//添加电影
 	addMovie: function (req, res, next) {
 		pool.getConnection(function (err, connection) {
 			//获取前台页面传来的参数
 			//建立连接，向表中插入值
-			var params = req.body
+			var params = req.query
 			var data = {
 				name: params.name,
 				rating: params.rating,
@@ -45,17 +46,25 @@ module.exports = {
 			})
 		})
 	},
+	//根据种类查询电影
 	queryByKind: function (req, res, next) {
 		var kind = req.query.kind;//为了拼凑正确的sql语句，这里要转下整数
+		var count = req.query.count ? parseInt(req.query.count) : 10 //返回的数量
+		var start = req.query.start ? parseInt(req.query.start) : 0 //从第几个开始返回从0开始计数
 		pool.getConnection(function (err, connection) {
-			connection.query($sql.queryByKind, kind,function (err, result) {
-				jsonWrite(res, result);
+			connection.query($sql.queryByKind, [kind, start, count], function (err, result) {
+				var newRes = {}
+				newRes.result = result
+				newRes.count = count //返回的字段增加count
+				newRes.start = start //返回的字段增加start
+				jsonWrite(res, newRes);
 				connection.release();
 			})
 		})
 	},
+	//根据电影名称来更新电影的信息
 	updateByName: function (req, res, next) {
-		var params = req.body
+		var params = req.query
 		var data = {
 				name: params.name,
 				rating: params.rating,

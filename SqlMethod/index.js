@@ -46,9 +46,21 @@ module.exports = {
 			})
 		})
 	},
+	//查询所有电影
+	queryAll: function (req, res, next) {
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.queryAll, function (err, result) {
+				jsonWrite(res, result)
+			})
+		})
+	},
 	//根据种类查询电影
 	queryByKind: function (req, res, next) {
 		var kind = req.query.kind;//为了拼凑正确的sql语句，这里要转下整数
+		//由于kind是中文的话获取是乱码所以这里做一个转化，QAQ我才不会说是因为改了很多次编码格式都不成功才出此下策，
+		//以后可能去掉
+		kind == 'isShow' ? kind = '正在热映' : kind
+		kind == 'willShow' ? kind = '即将上映' : kind
 		var count = req.query.count ? parseInt(req.query.count) : 10 //返回的数量
 		var start = req.query.start ? parseInt(req.query.start) : 0 //从第几个开始返回从0开始计数
 		pool.getConnection(function (err, connection) {

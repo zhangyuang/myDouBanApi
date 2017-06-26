@@ -8,6 +8,9 @@ router.get('/', function (req, res, next) {
 router.post('/addMovie', function (req, res, next) {
 	SqlMethod.addMovie(req, res, next)
 })
+router.get('/queryAll', function (req, res, next) {
+	SqlMethod.queryAll(req, res, next)
+})
 router.get('/queryByKind', function (req, res ,next) {
 	SqlMethod.queryByKind(req, res, next)
 })

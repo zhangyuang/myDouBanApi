@@ -24,7 +24,7 @@ module.exports = {
 		pool.getConnection(function (err, connection) {
 			//获取前台页面传来的参数
 			//建立连接，向表中插入值
-			var params = req.query
+			var params = req.query || req.body
 			var data = {
 				name: params.name,
 				rating: params.rating,
@@ -56,7 +56,7 @@ module.exports = {
 	},
 	//根据种类查询电影
 	queryByKind: function (req, res, next) {
-		var kind = req.query.kind;//为了拼凑正确的sql语句，这里要转下整数
+		var kind = req.query.kind || req.body.kind //为了拼凑正确的sql语句，这里要转下整数
 		//由于kind是中文的话获取是乱码所以这里做一个转化，QAQ我才不会说是因为改了很多次编码格式都不成功才出此下策，
 		//以后可能去掉
 		kind == 'isShow' ? kind = '正在热映' : kind
@@ -76,7 +76,7 @@ module.exports = {
 	},
 	//根据电影名称来更新电影的信息
 	updateByName: function (req, res, next) {
-		var params = req.query
+		var params = req.query || req.body
 		var data = {
 				name: params.name,
 				rating: params.rating,
@@ -94,6 +94,23 @@ module.exports = {
 				}
 				jsonWrite(res, result);
 				connection.release();
+			})
+		})
+	},
+	//获取热搜词
+	queryHotEmoji: function (req, res, next) {
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.queryHotEmoji, function (err, result) {
+				jsonWrite(res, result)
+			})
+		})
+	},
+	//根据名称模糊查询
+	queryByName: function (req, res, next) {
+		var name = req.query.name || req.body.name
+		pool.getConnection(function (err, connection) {
+			connection.query($sql.queryByName + "'%"+ name + "%'", function (err, result) {
+				jsonWrite(res, result)
 			})
 		})
 	}

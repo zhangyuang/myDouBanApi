@@ -4,7 +4,13 @@
 并将/config下的配置文件改为自己本机的mysql配置
 <br>
 对应的前端[项目地址](https://github.com/zhangyuang/doubanbyvuessr)基于最新的vue2.3 ssr搭建的仿豆瓣项目。
-
+```
+直接在根目录下
+npm start
+即可启动服务
+例子：在浏览器输入http://localhost:3000/douban/queryAll
+可以获得所有电影信息
+```
 # 目标功能
 - [x] 查询所有电影 -- 完成
 - [x] 根据种类查询电影 -- 完成
